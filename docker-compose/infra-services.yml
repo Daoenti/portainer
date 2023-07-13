@@ -40,7 +40,7 @@ services:
     image: jc21/nginx-proxy-manager:latest
     networks:
       - infra-services
-      - media-services
+      - media-management
     ports:
       - 192.168.1.151:80:80
       - 192.168.1.151:443:443
@@ -59,8 +59,8 @@ volumes:
 networks:
   infra-services:
     name: infra-services
-  media-services:
-    name: media-services
+  media-management:
+    name: media-management
     external: true
   backend:
     name: backend

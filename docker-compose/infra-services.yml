@@ -6,36 +6,6 @@ x-common-variables: &common-variables
   TZ: Etc/UTC
 
 services:
-  pihole:
-    image: pihole/pihole:latest
-    environment:
-      <<: *common-variables
-      WEBPASSWORD: ${PIHOLE_PASSWORD}
-      MOZILLA_CANARY: true
-      DNS1: 1.1.1.1
-      DNS2: 1.0.0.1
-      VIRTUAL_HOST: pi.hole
-      DNSMASQ_LISTENING: all
-      ServerIP: 192.168.1.151
-    networks:
-      infra-services:
-        ipv4_address: 172.45.0.3
-    ports:
-      - 192.168.1.151:53:53/tcp
-      - 192.168.1.151:53:53/udp
-      - 8600:80
-    dns:
-      - 127.0.0.1
-      - 1.1.1.1
-    volumes:
-      - pihole_config:/etc/pihole
-      - pihole_dnsmasq:/etc/dnsmasq.d
-    cap_add:
-      - NET_ADMIN
-    depends_on:
-      - dhcphelper
-    restart: unless-stopped
-
   cgit:
     image: clearlinux/cgit:latest
     networks:
@@ -46,39 +16,5 @@ services:
       - C:\Users\yohnt\github:/var/www/cgit
     restart: unless-stopped
 
-  npm-local:
-    image: jc21/nginx-proxy-manager:latest
-    networks:
-      - infra-services
-      - media-management
-    ports:
-      - 192.168.1.151:80:80
-      - 192.168.1.151:443:443
-      - 192.168.1.151:81:81
-    volumes:
-      - npm_local_data:/data
-      - npm_local_ssl:/etc/letsencrypt
-
-  dhcphelper:
-    build: ./dhcp-helper
-    restart: unless-stopped
-    network_mode: host
-    command: -s 172.45.0.3
-    cap_add:
-      - NET_ADMIN
-
-volumes: 
-  pihole_config:
-  pihole_dnsmasq:
-  gitlab_runner_conf:
-  npm_local_data:
-  npm_local_ssl:
-
 networks:
   infra-services:
-    ipam:
-      config:
-        - subnet: 172.45.0.0/16
-  media-management:
-    external: true
-  backend:

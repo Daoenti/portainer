@@ -19,7 +19,7 @@ services:
       ServerIP: 192.168.1.151
     networks:
       infra-services:
-        ipv4_address: 172.22.0.3
+        ipv4_address: 172.45.0.3
     ports:
       - 192.168.1.151:53:53/tcp
       - 192.168.1.151:53:53/udp
@@ -63,7 +63,7 @@ services:
     build: ./dhcp-helper
     restart: unless-stopped
     network_mode: host
-    command: -s 172.22.0.3
+    command: -s 172.45.0.3
     cap_add:
       - NET_ADMIN
 
@@ -78,7 +78,7 @@ networks:
   infra-services:
     ipam:
       config:
-        - subnet: 172.22.0.0/16
+        - subnet: 172.45.0.0/16
   media-management:
     external: true
   backend:
